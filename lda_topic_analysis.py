@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import seaborn as sns
@@ -6,8 +7,12 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import logging
 from custom_lda_v2 import CustomLDA  # Replace with the actual file name where CustomLDA is defined
-
 import pickle
+
+# Create Insights folder if it does not exist
+output_folder = "Insights"
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
 
 # Load the trained LDA model from the file
 with open('lda_model.pkl', 'rb') as f:
@@ -19,41 +24,40 @@ doc_topic_df = pd.read_csv('Custom LDA Topics/doc_topic_mappings.csv')
 topic_aspect_df = pd.read_csv('Custom LDA Topics/lda_topics_with_aspects.csv')
 
 # 1. Visualize Topic Distribution
-# Plot the number of documents associated with each dominant topic
 plt.figure(figsize=(8, 5))
 doc_topic_df['Dominant Topic'].value_counts().plot(kind='bar', color='skyblue')
 plt.title('Topic Distribution')
 plt.xlabel('Topic ID')
 plt.ylabel('Number of Documents')
-plt.show()
+plt.savefig(f"{output_folder}/topic_distribution.png")
+plt.close()
 
 # 2. Generate Word Clouds for Topics
-# Create and display a word cloud for each topic's keywords
 for topic_id in topic_aspect_df['Topic ID']:
     # Extract keywords for the current topic
     keywords = topic_aspect_df.loc[topic_aspect_df['Topic ID'] == topic_id, 'Keywords'].values[0]
     wordcloud = WordCloud(width=800, height=400, background_color='white').generate(keywords)
 
-    # Display the word cloud
+    # Display and save the word cloud
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')  # Remove axes for cleaner visualization
     plt.title(f'Topic {topic_id} Word Cloud')
-    plt.show()
+    plt.savefig(f"{output_folder}/topic_{topic_id}_wordcloud.png")
+    plt.close()
 
 # 3. Stacked Bar Chart for Label-Topic Distribution
-# Group documents by their labels and dominant topics, then visualize the distribution
 label_topic_dist = doc_topic_df.groupby(['Dominant Topic', 'Label']).size().unstack(fill_value=0)
 label_topic_dist.plot(kind='bar', stacked=True, figsize=(10, 6), colormap='viridis')
 plt.title('Label Distribution Across Topics')
 plt.xlabel('Topic ID')
 plt.ylabel('Number of Documents')
-plt.show()
+plt.savefig(f"{output_folder}/label_topic_distribution.png")
+plt.close()
 
 # Advanced Metrics and Visualizations
 
 # 1. Compute Inter-topic Similarity
-# Measure similarity between topics using cosine similarity
 def compute_inter_topic_similarity(lda):
     similarity_matrix = cosine_similarity(lda.topic_word_counts)
     return similarity_matrix
@@ -63,10 +67,10 @@ similarity_matrix = compute_inter_topic_similarity(lda)
 sns.heatmap(similarity_matrix, annot=True, cmap="coolwarm", 
             xticklabels=range(lda.num_topics), yticklabels=range(lda.num_topics))
 plt.title('Inter-topic Similarity Heatmap')
-plt.show()
+plt.savefig(f"{output_folder}/inter_topic_similarity.png")
+plt.close()
 
 # 2. Perplexity Calculation
-# Measure the model's ability to represent the data
 def compute_perplexity(lda):
     likelihood = 0
     for doc_idx, doc in enumerate(lda.corpus):
@@ -80,7 +84,6 @@ def compute_perplexity(lda):
     return perplexity
 
 # 3. Topical Diversity
-# Compute the proportion of unique top words across all topics
 def compute_topical_diversity(lda, top_n=10):
     unique_words = set()
     total_words = 0
@@ -99,7 +102,6 @@ logging.info(f"Perplexity: {perplexity}")
 logging.info(f"Topical Diversity: {diversity}")
 
 # 4. Label Purity
-# Measure how consistently a single label is assigned to documents in each topic
 def compute_label_purity(lda, labels):
     topic_purity = []
     for topic_id in range(lda.num_topics):
@@ -115,7 +117,6 @@ label_purity = compute_label_purity(lda, doc_topic_df['Label'])
 logging.info(f"Label Purity: {label_purity}")
 
 # 5. Topic Drift Over Iterations
-# Measure variance in topic distributions to observe model stability
 def compute_topic_drift(lda):
     return np.var(lda.doc_topic_counts, axis=0)
 
@@ -124,10 +125,10 @@ plt.plot(range(len(topic_drift)), topic_drift, color='purple')
 plt.title('Topic Drift Over Iterations')
 plt.xlabel('Iterations')
 plt.ylabel('Variance in Topic Distributions')
-plt.show()
+plt.savefig(f"{output_folder}/topic_drift.png")
+plt.close()
 
 # 6. Matrix Sparsity
-# Calculate sparsity of the document-topic matrix
 def compute_sparsity(matrix):
     total_elements = np.prod(matrix.shape)
     non_zero_elements = np.count_nonzero(matrix)
@@ -137,7 +138,6 @@ sparsity = compute_sparsity(lda.doc_topic_counts)
 logging.info(f"Sparsity: {sparsity}")
 
 # 7. Model Convergence
-# Visualize changes in topic-word distributions over iterations
 def plot_model_convergence(lda):
     changes = np.diff(lda.topic_word_counts, axis=0)
     avg_change = np.mean(np.abs(changes), axis=1)
@@ -145,6 +145,16 @@ def plot_model_convergence(lda):
     plt.title('Model Convergence')
     plt.xlabel('Iterations')
     plt.ylabel('Avg Change in Topic-Word Distributions')
-    plt.show()
+    plt.savefig(f"{output_folder}/model_convergence.png")
+    plt.close()
 
 plot_model_convergence(lda)
+
+# Save matrices to text files
+np.savetxt(f"{output_folder}/doc_topic_counts.txt", lda.doc_topic_counts, fmt='%f')
+np.savetxt(f"{output_folder}/topic_word_counts.txt", lda.topic_word_counts, fmt='%f')
+np.savetxt(f"{output_folder}/similarity_matrix.txt", similarity_matrix, fmt='%f')
+
+# Save the DataFrame as a CSV file
+doc_topic_df.to_csv(f"{output_folder}/doc_topic_mappings.csv", index=False)
+topic_aspect_df.to_csv(f"{output_folder}/lda_topics_with_aspects.csv", index=False)
