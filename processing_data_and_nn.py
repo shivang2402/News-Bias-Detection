@@ -39,9 +39,9 @@ class Processing_Text():
                     word_vectors.append(model.wv[word])  # Fetch the embedding vector
                 else:
                     word_vectors.append(np.zeros(model.vector_size))  # Use zeros for unknown words
-
+            # Return the mean vector for the sentence
             embed_values.append(np.mean(word_vectors, axis=0))
-        # Return the mean vector for the sentence
+
         return np.array(embed_values)
 
 
