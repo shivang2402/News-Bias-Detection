@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 from nltk.corpus import stopwords 
 nltk.download('stopwords')
 from keras import layers
-from processing_1 import *
+from theresa.processing_data_and_nn import *
 
 # Load the preprocessed file
 df_text = pd.read_csv("../News-Bias-Detection/preprocessed_bias_train.csv")
