@@ -31,23 +31,24 @@ class Processing_Text():
     # output a value to represent an entire sentence (text_token)
     def text_to_value(texts, model):
         embed_values = []
-
         for text in texts:
-        # Check if the word exists in the model's vocabulary
-            if text in model.wv:  # Access the KeyedVectors via `model.wv`
-                embed_values.append(model.wv[text])  # Fetch the embedding vector
-            else:
-                embed_values.append(np.zeros(model.vector_size))  # Use zeros for unknown words
+            word_vectors = []
+            for word in text:
+                # Check if the word exists in the model's vocabulary
+                if word in model.wv:  # access the KeyedVectors via `model.wv`
+                    word_vectors.append(model.wv[word])  # Fetch the embedding vector
+                else:
+                    word_vectors.append(np.zeros(model.vector_size))  # Use zeros for unknown words
 
-    # Return the mean vector for the sentence
-        return np.mean(embed_values, axis=0)
+            embed_values.append(np.mean(word_vectors, axis=0))
+        # Return the mean vector for the sentence
+        return np.array(embed_values)
 
 
 # allow for the network to use it
 class Custom_Dataset(Dataset):
     # turns the splits training data into tensor datasets 
     def __init__(self, texts, labels):
-        #converts the data into tensor --> 
         self.texts = texts
         self.labels = labels
 
@@ -55,42 +56,23 @@ class Custom_Dataset(Dataset):
         return len(self.texts)
 
     def __getitem__(self, idx):   
-        text = torch.tensor(self.texts[idx], dtype=torch.float32)  # Ensure dtype matches
-        label = torch.tensor(self.labels[idx], dtype=torch.long)  # CrossEntropyLoss expects long for labels
+        text = torch.tensor(self.texts.iloc[idx], dtype=torch.float32)  # Ensure dtype matches
+        label = torch.tensor(self.labels.iloc[idx], dtype=torch.long)  # CrossEntropyLoss expects long for labels
         return text, label
 
-
-
-#  the general model here 
+#  the general bdm model here 
 class Bias_Detect_Model(nn.Module):
-    def __init__(self, inner_feature=150, outer_feature=10):  # Change inner_feature to 150
-        super().__init__()
-        self.fc1 = nn.Linear(inner_feature, 588)  # Update fc1's input size
-        self.fc2 = nn.Linear(588, 392)
-        self.fc3 = nn.Linear(392, 196)
-        self.fc4 = nn.Linear(196, 88)
-        self.out = nn.Linear(88, outer_feature)
+    def __init__(self, inner_feature=150, outer_feature=2):
+        super(Bias_Detect_Model, self).__init__()
+        self.fc1 = nn.Linear(inner_feature, 128)
+        self.bn1 = nn.BatchNorm1d(128)
+        self.fc2 = nn.Linear(128, 64)
+        self.fc3 = nn.Linear(64, outer_feature)  # Binary classification (biased/unbiased)
 
     def forward(self, x):
-        x = torch.flatten(x, start_dim=1) 
         x = torch.relu(self.fc1(x))
+        x = self.bn1(x)
         x = torch.relu(self.fc2(x))
-        x = torch.relu(self.fc3(x))
-        x = torch.relu(self.fc4(x))
-        x = self.out(x)
+        x = self.fc3(x)
         return x
-
-        
-
-# calculate the needed metrics 
-class Metrics():
-
-    def accuracy():
-        pass
-
-    def f1():
-        pass
-
-    def recall():
-        pass
-
+    
