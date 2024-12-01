@@ -15,9 +15,13 @@ from keras import layers
 
 class Processing_Text():
 
-    #handles the preprocessing of text
-    # stop words -  “the,” “a,” “an,” or “in” ...
+
     def preprocess_text(text, stop_words):
+        '''
+        handles the preprocessing of text
+        stop words -  “the,” “a,” “an,” or “in” ...
+        '''
+
         # lowercase the text
         text = text.lower()
         # remove punctuation
@@ -27,9 +31,12 @@ class Processing_Text():
         filtered_tokens = [word for word in tokens if word not in stop_words]
         return " ".join(filtered_tokens)
 
-    # takes the text and assigns them to their respective generated value
-    # output a value to represent an entire sentence (text_token)
+
     def text_to_value(texts, model):
+        '''
+        takes the text and assigns them to their respective generated value
+        output a value to represent an entire sentence (text_token)
+        '''
         embed_values = []
         for text in texts:
             word_vectors = []

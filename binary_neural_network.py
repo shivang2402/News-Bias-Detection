@@ -100,6 +100,7 @@ for epoch in range(num_epochs_bdm):
     
     print("Epoch Num:", epoch)
     print("Training loss:", running_loss_bdm)
+    print("Average loss:", running_loss_bdm/len(trainloader))
 
 print('Finished Training!')
 
@@ -121,8 +122,9 @@ with torch.no_grad():
     for data in testloader:
         text, labels = data
         outputs = bd_model(text)
+
         _, predicted = torch.max(outputs, 1)
-        
+
         correct_bdm += (predicted == labels).sum().item()
         total_bdm += labels.size(0)
         
