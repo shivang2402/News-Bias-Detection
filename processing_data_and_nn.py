@@ -62,12 +62,12 @@ class Custom_Dataset(Dataset):
 
 #  the general bdm model here 
 class Bias_Detect_Model(nn.Module):
-    def __init__(self, inner_feature=150, outer_feature=2):
+    def __init__(self, inner_feature=20, outer_feature=2):
         super(Bias_Detect_Model, self).__init__()
-        self.fc1 = nn.Linear(inner_feature, 128)
-        self.bn1 = nn.BatchNorm1d(128)
-        self.fc2 = nn.Linear(128, 64)
-        self.fc3 = nn.Linear(64, outer_feature)  # Binary classification (biased/unbiased)
+        self.fc1 = nn.Linear(inner_feature, 16)
+        self.bn1 = nn.BatchNorm1d(16)
+        self.fc2 = nn.Linear(16, 8)
+        self.fc3 = nn.Linear(8, outer_feature)  # Binary classification (biased/unbiased)
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))

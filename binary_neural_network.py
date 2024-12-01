@@ -30,7 +30,7 @@ for text in tokens:
 # Build Word2Vec model
 model = gensim.models.Word2Vec(
     corpus_tokens,  # tokenized sentences
-    vector_size=150,  # size of the embedding vectors
+    vector_size=20,  # size of the embedding vectors
     window=5,  # context window size relative to current main word
     min_count=2,  # ignore words that appear less than 2 times
     workers=12,  
