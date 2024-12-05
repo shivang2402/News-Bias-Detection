@@ -57,6 +57,7 @@ The **News Bias Detection** project aims to identify bias in news articles by an
    ```bash
    python src/datapreprocess.py
 
+**Results**: Results for this project are uploaded here **[results](https://drive.google.com/drive/folders/1p83Eldkw82I57rtuK0Voa8XPrOOgX6xf)** for training and evaluation.
 
 
 
