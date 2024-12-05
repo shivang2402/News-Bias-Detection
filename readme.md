@@ -15,7 +15,7 @@ The **News Bias Detection** project aims to identify bias in news articles by an
   - Natural Language Toolkit (NLTK)
   - Scikit-learn
   - Pandas, NumPy
-- **Dataset**: The project uses the **Shainar/BEAD dataset** for training and evaluation.
+- **Dataset**: The project uses the **[Shainar/BEAD dataset](https://drive.google.com/drive/folders/1l2ZWdzw5sj_DO15N5oZX7HQKBX40qMMr?usp=drive_link)** for training and evaluation. 
 
 
 ## Folder Structure
