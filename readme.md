@@ -57,7 +57,9 @@ The **News Bias Detection** project aims to identify bias in news articles by an
 
 4. **Run the required files**
    ```bash
-   Example : python src/datapreprocess.py
+   Example :
+   python src/datapreprocess.py
+   python binary_neural_network.py
 
 
 
