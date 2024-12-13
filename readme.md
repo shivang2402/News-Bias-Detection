@@ -36,6 +36,8 @@ The **News Bias Detection** project aims to identify bias in news articles by an
 
 ## Commands to Run the Project
 
+please switch to Final-Version branch before executing the below commands.
+
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/shivang2402/News-Bias-Detection.git
@@ -56,6 +58,8 @@ The **News Bias Detection** project aims to identify bias in news articles by an
 4. **Run the required files**
    ```bash
    python src/datapreprocess.py
+
+
 
 **Results**: Results for this project are uploaded here **[results](https://drive.google.com/drive/folders/1p83Eldkw82I57rtuK0Voa8XPrOOgX6xf)**.
 
