@@ -36,7 +36,7 @@ The **News Bias Detection** project aims to identify bias in news articles by an
 
 ## Commands to Run the Project
 
-***Please switch to Final-Version branch before executing the below commands.
+**Please switch to Final-Version branch before executing the below commands.
 
 1. **Clone the Repository**
    ```bash
