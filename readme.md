@@ -1,21 +1,56 @@
 # News Bias Detection
 
-## Project Overview
-The **News Bias Detection** project aims to identify bias in news articles by analyzing the text content. The application utilizes natural language processing (NLP) techniques, topic modeling, and statistical analysis to detect bias patterns and provide an unbiased assessment of the article. This project focuses on building the bias detection model from scratch without relying on pre-trained models.
+## Overview  
+This project focuses on detecting bias in news articles by classifying sentences and assigning bias scores. We implemented four models—two Binary Classification Models, a Random Forest model, and a Multi-Class Classification model—to determine the most effective approach for automated bias detection.  
 
-## Features
-- Analyze news articles to detect potential bias.
-- Implemented from scratch using foundational NLP techniques.
-- Utilizes **TF-IDF**, **Latent Dirichlet Allocation (LDA)**, and **custom heuristics** for topic modeling and bias identification.
-- Designed to be modular and extensible for future enhancements.
+## Features  
+- **Binary Classification Models**: Classify text as biased (1) or unbiased (0).  
+- **Multi-Class Classification Model**: Categorizes bias based on predefined aspects.  
+- **Random Forest Model**: Leverages ensemble learning for robust classification.  
+- **Custom NLP Techniques**: Uses TF-IDF, Latent Dirichlet Allocation (LDA), and Word2Vec embeddings.  
+- **Evaluation Metrics**: Accuracy, Precision, Recall, and F1-score for model comparison.
 
-## Technologies Used
-- **Programming Language**: Python
-- **Libraries**:
-  - Natural Language Toolkit (NLTK)
-  - Scikit-learn
-  - Pandas, NumPy
-- **Dataset**: The project uses the **[Shainar/BEAD dataset](https://drive.google.com/drive/folders/1l2ZWdzw5sj_DO15N5oZX7HQKBX40qMMr?usp=drive_link)** for training and evaluation. 
+## Methodology  
+1. **Data Preprocessing**:  
+   - Tokenization, stopword removal, lemmatization.  
+   - Custom TF-IDF computation for feature extraction.  
+   - LDA for topic modeling and bias detection.  
+
+2. **Model Implementation**:  
+   - **Model 1**: Neural Network with TF-IDF and LDA.  
+   - **Model 2**: Word2Vec-based Neural Network.  
+   - **Model 3**: Random Forest Model.  
+   - **Model 4**: Hybrid Neural Network integrating TF-IDF & LDA.  
+
+3. **Optimization & Training**:  
+   - Adam optimizer with learning rate tuning.  
+   - Early stopping to prevent overfitting.  
+   - Batch size: 32, Maximum epochs: 150.  
+
+## Dataset   
+We used the **[Shainar/BEAD dataset](https://drive.google.com/drive/folders/1l2ZWdzw5sj_DO15N5oZX7HQKBX40qMMr?usp=drive_link)** (**Bias Evaluation Across Domains (BEADs)**), which includes:  
+- **Multi-Aspect Bias Coverage**: Gender, ethnicity, age, and other demographic biases.  
+- **Hybrid Annotation**: Labeled using AI models (GPT-4) and human verification.  
+- **Versatility**: Supports text classification, token classification, and language modeling.
+
+
+
+## Results:
+
+- Results for this project are uploaded here **[results](https://drive.google.com/drive/folders/1p83Eldkw82I57rtuK0Voa8XPrOOgX6xf)**.
+
+  
+| Model  | Accuracy | Precision | Recall | F1-Score |  
+|--------|----------|-----------|--------|----------|  
+| Model 1 | 75% | 75% | 75% | 75% |  
+| Model 2 | 68% | 69% | 67% | 67% |  
+| Model 3 | 73% | 82% | 65% | 65% |  
+| Model 4 | 75% | 76% | 76% | 76% |  
+
+## Conclusion  
+- **Model 4 (Hybrid Neural Network)** outperformed other models in bias classification.  
+- **LDA and TF-IDF feature integration** improved interpretability and performance.  
+- **Further Improvements**: Bi-LSTM architecture for better sequence-based bias detection.  
 
 
 ## Folder Structure
@@ -63,7 +98,7 @@ The **News Bias Detection** project aims to identify bias in news articles by an
 
 
 
-**Results**: Results for this project are uploaded here **[results](https://drive.google.com/drive/folders/1p83Eldkw82I57rtuK0Voa8XPrOOgX6xf)**.
+
 
 
 
